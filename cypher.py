@@ -39,9 +39,7 @@ def decrypt(target, output, master):
     with open(output, 'w') as file:
         for line_dec in lines_decrypted:
             file.write(line_dec)
-    os.remove(target)
     print(f"\nArquivo '{target}' descriptografado com sucesso para a chave mestre fornecida para '{output}'.")
-    print(f"ATENÇÃO: o arquivo '{target}' foi apagado.")
 
 # rotina principal
 master_pw:        str = input("Digite a senha mestre: ")
