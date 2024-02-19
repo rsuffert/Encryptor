@@ -8,7 +8,9 @@ def encrypt(target, output, master):
             pointer: int = 0
             for char in line: # para cada caractere do registro
                 if not char == "\n":
-                    line_encrypted += chr( (ord(char)+ord(master[pointer])+32) % 126 )
+                    #line_encrypted += chr( (ord(char)+ord(master[pointer])+32) % 126 )
+                    summ: int = ord(char)+ord(master[pointer])
+                    line_encrypted += chr( ((summ-32)%(126-32+1)) + 32 )
                     pointer += 1
                     if pointer > len(master)-1: pointer=0
             lines_encrypted.append(line_encrypted + "\n")
@@ -28,7 +30,8 @@ def decrypt(target, output, master):
             line_dec: str = ""
             for char_enc in line:
                 if not char_enc == "\n":
-                    line_dec += chr( (ord(char_enc)-ord(master[pointer])-32) % 126 )
+                    diff: int = (ord(char_enc) - 32) - ord(master[pointer])
+                    line_dec += chr(((diff % (126 - 32 + 1)) + (126 - 32 + 1)) % (126 - 32 + 1) + 32)
                     pointer += 1
                     if pointer > len(master)-1: pointer=0
             lines_decrypted.append(line_dec + "\n")
