@@ -1,4 +1,5 @@
 import os
+import sys
 
 def encrypt(target, output, master):
     lines_encrypted: list = []
@@ -18,7 +19,7 @@ def encrypt(target, output, master):
         for line in lines_encrypted:
             file.write(line)
     os.remove(target)
-    print(f"\nArquivo '{target}' criptografado com sucesso com a chave-mestre para o arquivo '{output}'.")
+    print(f"Arquivo '{target}' criptografado com sucesso com a chave-mestre para o arquivo '{output}'.")
     print(f"ATENÇÃO: o arquivo '{target}' foi apagado.")
 
 def decrypt(target, output, master):
@@ -39,14 +40,34 @@ def decrypt(target, output, master):
     with open(output, 'w') as file:
         for line_dec in lines_decrypted:
             file.write(line_dec)
-    print(f"\nArquivo '{target}' descriptografado com sucesso para a chave mestre fornecida para '{output}'.")
+    print(f"Arquivo '{target}' descriptografado com sucesso para a chave mestre fornecida para '{output}'.")
+
+def help():
+    exec_name: str = sys.argv[0].split("/")[-1]
+    print(f"python {exec_name} -help (para ajuda)")
+    print(f"python {exec_name} -e <target_file_name> <output_file_name> <master_password> (para criptografar)")
+    print(f"python {exec_name} -d <target_file_name> <output_file_name> <master_password> (para descriptografar)")
 
 # rotina principal
-master_pw:        str = input("Digite a senha mestre: ")
-target_file_name: str = input("Digite o nome do arquivo texto (.txt) sobre o qual operar (deve estar nesta pasta): ") + ".txt"
-output_file_name: str = input("Digite o nome do arquivo de destino, sem a extensão (será criado nesta pasta): ") + ".txt"
-enc_or_dec:       str = input("Encriptar ou decriptar [E/D]? ").upper()
-match enc_or_dec:
-    case "E": encrypt(target_file_name, output_file_name, master_pw)
-    case "D": decrypt(target_file_name, output_file_name, master_pw)
-    case _:   print("Opção inválida! Digite apenas 'E' ou 'D'.")
+if len(sys.argv) <= 1:
+    help()
+    sys.exit(-1)
+
+option: str = sys.argv[1].lower()
+match option:
+    case "-e":
+        if len(sys.argv) != 5:
+            print("Sintaxe inválida! Opções:")
+            help()
+        else:
+            encrypt(sys.argv[2], sys.argv[3], sys.argv[4])      
+    case "-d":
+        if len(sys.argv) != 5:
+            print("Sintaxe inválida! Opções:")
+            help()
+        else:
+            decrypt(sys.argv[2], sys.argv[3], sys.argv[4])
+    case "-help":
+        help()
+    case _:
+        print("Flag inválida! Opções: -help, -e, -d")
