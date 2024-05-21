@@ -1,5 +1,6 @@
 import os
 import sys
+from getpass import getpass
 
 def encrypt(target, output, master):
     lines_encrypted: list = []
@@ -45,8 +46,8 @@ def decrypt(target, output, master):
 def help():
     exec_name: str = sys.argv[0].split("/")[-1]
     print(f"python {exec_name} -help (para ajuda)")
-    print(f"python {exec_name} -e <target_file_name> <output_file_name> <master_password> (para criptografar)")
-    print(f"python {exec_name} -d <target_file_name> <output_file_name> <master_password> (para descriptografar)")
+    print(f"python {exec_name} -e <target_file_name> <output_file_name> (para criptografar)")
+    print(f"python {exec_name} -d <target_file_name> <output_file_name> (para descriptografar)")
 
 # rotina principal
 if len(sys.argv) <= 1:
@@ -56,17 +57,17 @@ if len(sys.argv) <= 1:
 option: str = sys.argv[1].lower()
 match option:
     case "-e":
-        if len(sys.argv) != 5:
+        if len(sys.argv) != 4:
             print("Sintaxe inválida! Opções:")
             help()
         else:
-            encrypt(sys.argv[2], sys.argv[3], sys.argv[4])      
+            encrypt(sys.argv[2], sys.argv[3], getpass(prompt="Digite a senha mestre: "))      
     case "-d":
-        if len(sys.argv) != 5:
+        if len(sys.argv) != 4:
             print("Sintaxe inválida! Opções:")
             help()
         else:
-            decrypt(sys.argv[2], sys.argv[3], sys.argv[4])
+            decrypt(sys.argv[2], sys.argv[3], getpass(prompt="Digite a senha mestre: "))
     case "-help":
         help()
     case _:
